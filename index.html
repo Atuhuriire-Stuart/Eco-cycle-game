@@ -46,12 +46,18 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
             background-color: #f0f8f0;
             color: var(--dark);
             line-height: 1.6;
+            touch-action: manipulation;
         }
         
         .container {
@@ -155,6 +161,15 @@
             text-align: center;
             padding: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            touch-action: none;
+            -webkit-user-drag: element;
+        }
+        
+        .item.dragging {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+            position: relative;
         }
         
         .item:hover {
@@ -183,6 +198,12 @@
             font-weight: bold;
             position: relative;
             overflow: hidden;
+            transition: transform 0.2s;
+        }
+        
+        .bin.highlight {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 3px var(--accent);
         }
         
         .bin-label {
@@ -224,6 +245,7 @@
             font-size: 1rem;
             cursor: pointer;
             transition: background-color 0.3s;
+            touch-action: manipulation;
         }
         
         button:hover {
@@ -251,6 +273,7 @@
             cursor: pointer;
             transition: transform 0.3s;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            touch-action: manipulation;
         }
         
         .level-card:hover {
@@ -315,7 +338,8 @@
             border-radius: 10px;
             font-size: 1.5rem;
             display: none;
-            z-index: 100;
+            z-index: 1000;
+            text-align: center;
         }
         
         .progress-bar {
@@ -342,6 +366,17 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
+        .mobile-help {
+            display: none;
+            background-color: var(--accent);
+            color: var(--dark);
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
         @media (max-width: 768px) {
             .game-board {
                 grid-template-columns: 1fr;
@@ -360,6 +395,37 @@
                 height: 100px;
                 font-size: 0.9rem;
             }
+            
+            .mobile-help {
+                display: block;
+            }
+            
+            .item {
+                height: 90px;
+                font-size: 0.9rem;
+            }
+            
+            .bin {
+                height: 120px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .items-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .item {
+                height: 80px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .level-title {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
@@ -371,6 +437,10 @@
         </header>
         
         <div class="game-area">
+            <div class="mobile-help">
+                📱 Tap and hold items to drag them to bins
+            </div>
+            
             <div class="ecosystem-info" id="ecosystem-info">
                 <h3>Forest Ecosystem</h3>
                 <p>Sort waste commonly found in forest environments. Watch out for camping leftovers and hiking trash!</p>
@@ -623,6 +693,11 @@
         const levelCards = document.querySelectorAll('.level-card');
         const ecosystemInfo = document.getElementById('ecosystem-info');
 
+        // Mobile detection and touch handling
+        let activeItem = null;
+        let startX = 0;
+        let startY = 0;
+
         // Initialize game
         function initGame() {
             loadLevel(gameData.currentLevel);
@@ -641,14 +716,26 @@
                 });
             });
             
-            // Add drag and drop event listeners to bins
+            // Setup drag and drop for desktop
+            setupDesktopDragDrop();
+            
+            // Setup touch events for mobile
+            setupMobileTouchEvents();
+        }
+
+        // Setup desktop drag and drop
+        function setupDesktopDragDrop() {
             document.querySelectorAll('.bin').forEach(bin => {
-                bin.addEventListener('dragover', e => {
-                    e.preventDefault();
-                });
-                
+                bin.addEventListener('dragover', handleDragOver);
                 bin.addEventListener('drop', handleDrop);
             });
+        }
+
+        // Setup mobile touch events
+        function setupMobileTouchEvents() {
+            document.addEventListener('touchstart', handleTouchStart, { passive: false });
+            document.addEventListener('touchmove', handleTouchMove, { passive: false });
+            document.addEventListener('touchend', handleTouchEnd);
         }
 
         // Load a specific level
@@ -678,8 +765,9 @@
                 itemElement.setAttribute('data-type', item.type);
                 itemElement.setAttribute('data-points', item.points);
                 
-                // Add drag event listeners
+                // Add drag event listeners for desktop
                 itemElement.addEventListener('dragstart', handleDragStart);
+                itemElement.addEventListener('dragend', handleDragEnd);
                 
                 itemsContainer.appendChild(itemElement);
             });
@@ -694,20 +782,113 @@
             updateLevelCards();
         }
 
-        // Handle drag start
+        // Desktop drag handlers
         function handleDragStart(e) {
             e.dataTransfer.setData('text/plain', e.target.textContent);
             e.dataTransfer.setData('type', e.target.getAttribute('data-type'));
             e.dataTransfer.setData('points', e.target.getAttribute('data-points'));
+            e.target.classList.add('dragging');
         }
 
-        // Handle drop on bins
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.target.classList.add('highlight');
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+            document.querySelectorAll('.bin').forEach(bin => {
+                bin.classList.remove('highlight');
+            });
+        }
+
         function handleDrop(e) {
             e.preventDefault();
+            e.target.classList.remove('highlight');
+            
             const itemType = e.dataTransfer.getData('type');
             const binType = e.target.id.replace('-bin', '');
             const points = parseInt(e.dataTransfer.getData('points'));
+            const itemName = e.dataTransfer.getData('text/plain');
             
+            processItemDrop(itemType, binType, points, itemName);
+        }
+
+        // Mobile touch handlers
+        function handleTouchStart(e) {
+            // Check if we're touching an item
+            const item = e.target.closest('.item');
+            if (!item) return;
+            
+            e.preventDefault();
+            activeItem = item;
+            const touch = e.touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
+            
+            activeItem.classList.add('dragging');
+        }
+
+        function handleTouchMove(e) {
+            if (!activeItem) return;
+            e.preventDefault();
+            
+            const touch = e.touches[0];
+            const deltaX = touch.clientX - startX;
+            const deltaY = touch.clientY - startY;
+            
+            // Update item position for visual feedback
+            activeItem.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(1.1)`;
+            
+            // Highlight bins when dragging over them
+            const bins = document.querySelectorAll('.bin');
+            bins.forEach(bin => {
+                const rect = bin.getBoundingClientRect();
+                if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+                    touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+                    bin.classList.add('highlight');
+                } else {
+                    bin.classList.remove('highlight');
+                }
+            });
+        }
+
+        function handleTouchEnd(e) {
+            if (!activeItem) return;
+            
+            const touch = e.changedTouches[0];
+            const bins = document.querySelectorAll('.bin');
+            let dropped = false;
+            
+            bins.forEach(bin => {
+                const rect = bin.getBoundingClientRect();
+                if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+                    touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+                    
+                    const itemType = activeItem.getAttribute('data-type');
+                    const binType = bin.id.replace('-bin', '');
+                    const points = parseInt(activeItem.getAttribute('data-points'));
+                    const itemName = activeItem.textContent;
+                    
+                    processItemDrop(itemType, binType, points, itemName);
+                    dropped = true;
+                }
+                bin.classList.remove('highlight');
+            });
+            
+            // Reset item position
+            activeItem.style.transform = '';
+            activeItem.classList.remove('dragging');
+            activeItem = null;
+            
+            // If not dropped on a bin, just reset without penalty
+            if (!dropped) {
+                // No penalty for missing the bin on mobile
+            }
+        }
+
+        // Common function to process item drops
+        function processItemDrop(itemType, binType, points, itemName) {
             if (itemType === binType) {
                 // Correct bin
                 gameData.score += points;
@@ -722,7 +903,7 @@
             // Remove the dragged item from DOM
             const items = document.querySelectorAll('.item');
             items.forEach(item => {
-                if (item.textContent === e.dataTransfer.getData('text/plain')) {
+                if (item.textContent === itemName) {
                     item.remove();
                 }
             });
