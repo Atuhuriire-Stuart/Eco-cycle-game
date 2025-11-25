@@ -205,6 +205,10 @@
             z-index: 1000;
         }
         
+        .item:hover {
+            transform: scale(1.05);
+        }
+        
         .bins-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -311,9 +315,17 @@
             padding: 5px;
         }
         
+        .level-card:hover {
+            transform: translateY(-2px);
+        }
+        
         .level-card.locked {
             background-color: #ccc !important;
             cursor: not-allowed;
+        }
+        
+        .level-card.locked:hover {
+            transform: none;
         }
         
         .forest-level {
@@ -408,6 +420,54 @@
             margin-bottom: 10px;
             font-weight: bold;
             font-size: 0.85rem;
+            display: none;
+        }
+
+        /* Desktop specific styles */
+        @media (min-width: 769px) {
+            .container {
+                max-width: 1200px;
+                padding: 20px;
+            }
+            
+            .game-board {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+            
+            .items-container {
+                grid-template-columns: repeat(3, 1fr);
+                min-height: 300px;
+            }
+            
+            .item {
+                height: 100px;
+                font-size: 1rem;
+            }
+            
+            .bin {
+                height: 150px;
+                font-size: 1rem;
+            }
+            
+            .levels-container {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 15px;
+            }
+            
+            .level-card {
+                height: 100px;
+                font-size: 1rem;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .mobile-help {
+                display: none !important;
+            }
         }
 
         /* Very small phones */
@@ -444,6 +504,17 @@
             
             .score {
                 font-size: 1.2rem;
+            }
+            
+            .mobile-help {
+                display: block;
+            }
+        }
+
+        /* Mobile devices */
+        @media (max-width: 768px) {
+            .mobile-help {
+                display: block;
             }
         }
 
@@ -489,6 +560,10 @@
             .level-card {
                 height: 50px;
                 font-size: 0.7rem;
+            }
+            
+            .mobile-help {
+                display: block;
             }
         }
     </style>
@@ -757,6 +832,9 @@
         const levelCards = document.querySelectorAll('.level-card');
         const ecosystemInfo = document.getElementById('ecosystem-info');
 
+        // Device detection
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
         // Mobile touch handling
         let activeItem = null;
         let startX = 0;
@@ -780,12 +858,30 @@
                 });
             });
             
-            // Setup touch events
-            setupTouchEvents();
+            // Setup appropriate drag/drop based on device
+            if (isMobile) {
+                setupMobileTouchEvents();
+            } else {
+                setupDesktopDragDrop();
+            }
         }
 
-        // Setup touch events for mobile
-        function setupTouchEvents() {
+        // Setup desktop drag and drop
+        function setupDesktopDragDrop() {
+            // Add drag events to items
+            document.addEventListener('dragstart', handleDragStart);
+            document.addEventListener('dragend', handleDragEnd);
+            
+            // Add drop events to bins
+            document.querySelectorAll('.bin').forEach(bin => {
+                bin.addEventListener('dragover', handleDragOver);
+                bin.addEventListener('dragleave', handleDragLeave);
+                bin.addEventListener('drop', handleDesktopDrop);
+            });
+        }
+
+        // Setup mobile touch events
+        function setupMobileTouchEvents() {
             document.addEventListener('touchstart', handleTouchStart, { passive: false });
             document.addEventListener('touchmove', handleTouchMove, { passive: false });
             document.addEventListener('touchend', handleTouchEnd);
@@ -816,6 +912,7 @@
                 itemElement.textContent = item.name;
                 itemElement.setAttribute('data-type', item.type);
                 itemElement.setAttribute('data-points', item.points);
+                itemElement.setAttribute('draggable', 'true');
                 
                 itemsContainer.appendChild(itemElement);
             });
@@ -828,6 +925,50 @@
             
             // Update level cards
             updateLevelCards();
+        }
+
+        // Desktop drag handlers
+        function handleDragStart(e) {
+            if (!e.target.classList.contains('item')) return;
+            
+            e.dataTransfer.setData('text/plain', e.target.textContent);
+            e.dataTransfer.setData('type', e.target.getAttribute('data-type'));
+            e.dataTransfer.setData('points', e.target.getAttribute('data-points'));
+            e.target.classList.add('dragging');
+        }
+
+        function handleDragOver(e) {
+            if (e.target.classList.contains('bin')) {
+                e.preventDefault();
+                e.target.classList.add('highlight');
+            }
+        }
+
+        function handleDragLeave(e) {
+            if (e.target.classList.contains('bin')) {
+                e.target.classList.remove('highlight');
+            }
+        }
+
+        function handleDragEnd(e) {
+            if (e.target.classList.contains('item')) {
+                e.target.classList.remove('dragging');
+            }
+            document.querySelectorAll('.bin').forEach(bin => {
+                bin.classList.remove('highlight');
+            });
+        }
+
+        function handleDesktopDrop(e) {
+            e.preventDefault();
+            e.target.classList.remove('highlight');
+            
+            const itemType = e.dataTransfer.getData('type');
+            const binType = e.target.id.replace('-bin', '');
+            const points = parseInt(e.dataTransfer.getData('points'));
+            const itemName = e.dataTransfer.getData('text/plain');
+            
+            processItemDrop(itemType, binType, points, itemName);
         }
 
         // Mobile touch handlers
