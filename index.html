@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Cycle | Recycling Game</title>
+    <meta name="description" content="Educational recycling game - sort waste items into correct bins across different ecosystems">
+    <style>
+        /* All the CSS from previous implementation */
+        :root {
+            --primary: #4CAF50;
+            --secondary: #2196F3;
+            --accent: #FFC107;
+            --danger: #F44336;
+            --light: #f5f5f5;
+            --dark: #333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f8f0;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .level-info, .score-info, .badges-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .level-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .score {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        
+        .badges {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .badge {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+        
+        .game-board {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .items-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            min-height: 300px;
+        }
+        
+        .item {
+            width: 100%;
+            height: 100px;
+            background-color: var(--light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            transition: transform 0.2s;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .item:hover {
+            transform: scale(1.05);
+        }
+        
+        .bins-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            min-height: 300px;
+        }
+        
+        .bin {
+            height: 150px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bin-label {
+            position: absolute;
+            top: 10px;
+            background-color: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        
+        .recycling-bin {
+            background-color: #4CAF50;
+        }
+        
+        .compost-bin {
+            background-color: #8BC34A;
+        }
+        
+        .trash-bin {
+            background-color: #795548;
+        }
+        
+        .hazardous-bin {
+            background-color: #F44336;
+        }
+        
+        .game-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--secondary);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #1976D2;
+        }
+        
+        .levels-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .level-card {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .level-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .level-card.locked {
+            background-color: #ccc !important;
+            cursor: not-allowed;
+        }
+        
+        .forest-level {
+            background-color: #4CAF50;
+        }
+        
+        .ocean-level {
+            background-color: #2196F3;
+        }
+        
+        .city-level {
+            background-color: #607D8B;
+        }
+        
+        .arctic-level {
+            background-color: #B3E5FC;
+            color: #333;
+        }
+        
+        .mountain-level {
+            background-color: #795548;
+        }
+        
+        .desert-level {
+            background-color: #FF9800;
+        }
+        
+        .wetland-level {
+            background-color: #009688;
+        }
+        
+        .farm-level {
+            background-color: #8BC34A;
+        }
+        
+        .beach-level {
+            background-color: #FFC107;
+            color: #333;
+        }
+        
+        .jungle-level {
+            background-color: #388E3C;
+        }
+        
+        .feedback {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            display: none;
+            z-index: 100;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .ecosystem-info {
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .game-board {
+                grid-template-columns: 1fr;
+            }
+            
+            .items-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .levels-container {
+                gap: 10px;
+            }
+            
+            .level-card {
+                width: 100px;
+                height: 100px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Eco-Cycle</h1>
+            <p>Sort waste items into the correct bins to protect our ecosystems!</p>
+        </header>
+        
+        <div class="game-area">
+            <div class="ecosystem-info" id="ecosystem-info">
+                <h3>Forest Ecosystem</h3>
+                <p>Sort waste commonly found in forest environments. Watch out for camping leftovers and hiking trash!</p>
+            </div>
+            
+            <div class="game-info">
+                <div class="level-info">
+                    <div class="level-title">Forest Ecosystem</div>
+                    <div class="progress-bar">
+                        <div class="progress" id="level-progress"></div>
+                    </div>
+                </div>
+                <div class="score-info">
+                    <div>Score</div>
+                    <div class="score" id="score">0</div>
+                </div>
+                <div class="badges-info">
+                    <div>Badges</div>
+                    <div class="badges">
+                        <div class="badge" title="Recycling Master">♻️</div>
+                        <div class="badge" title="Eco Warrior">🌍</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="game-board">
+                <div class="items-container" id="items-container">
+                    <!-- Items will be generated here -->
+                </div>
+                
+                <div class="bins-container">
+                    <div class="bin recycling-bin" id="recycling-bin">
+                        <div class="bin-label">Recycling</div>
+                    </div>
+                    <div class="bin compost-bin" id="compost-bin">
+                        <div class="bin-label">Compost</div>
+                    </div>
+                    <div class="bin trash-bin" id="trash-bin">
+                        <div class="bin-label">Trash</div>
+                    </div>
+                    <div class="bin hazardous-bin" id="hazardous-bin">
+                        <div class="bin-label">Hazardous</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="game-controls">
+                <button id="reset-btn">Reset Level</button>
+                <button id="next-level-btn" disabled>Next Level</button>
+            </div>
+            
+            <div class="levels-container">
+                <div class="level-card forest-level" data-level="1">
+                    <div>Forest</div>
+                    <div>Level 1</div>
+                </div>
+                <div class="level-card ocean-level locked" data-level="2">
+                    <div>Ocean</div>
+                    <div>Level 2</div>
+                </div>
+                <div class="level-card city-level locked" data-level="3">
+                    <div>City</div>
+                    <div>Level 3</div>
+                </div>
+                <div class="level-card arctic-level locked" data-level="4">
+                    <div>Arctic</div>
+                    <div>Level 4</div>
+                </div>
+                <div class="level-card mountain-level locked" data-level="5">
+                    <div>Mountain</div>
+                    <div>Level 5</div>
+                </div>
+                <div class="level-card desert-level locked" data-level="6">
+                    <div>Desert</div>
+                    <div>Level 6</div>
+                </div>
+                <div class="level-card wetland-level locked" data-level="7">
+                    <div>Wetland</div>
+                    <div>Level 7</div>
+                </div>
+                <div class="level-card farm-level locked" data-level="8">
+                    <div>Farm</div>
+                    <div>Level 8</div>
+                </div>
+                <div class="level-card beach-level locked" data-level="9">
+                    <div>Beach</div>
+                    <div>Level 9</div>
+                </div>
+                <div class="level-card jungle-level locked" data-level="10">
+                    <div>Jungle</div>
+                    <div>Level 10</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="feedback" id="feedback">
+            Correct! +10 points
+        </div>
+    </div>
+
+    <script>
+        // Game data
+        const gameData = {
+            currentLevel: 1,
+            score: 0,
+            itemsSorted: 0,
+            totalItems: 0,
+            levels: {
+                1: {
+                    name: "Forest Ecosystem",
+                    description: "Sort waste commonly found in forest environments. Watch out for camping leftovers and hiking trash!",
+                    items: [
+                        { name: "Plastic Bottle", type: "recycling", points: 10 },
+                        { name: "Apple Core", type: "compost", points: 10 },
+                        { name: "Candy Wrapper", type: "trash", points: 10 },
+                        { name: "Battery", type: "hazardous", points: 10 },
+                        { name: "Newspaper", type: "recycling", points: 10 },
+                        { name: "Banana Peel", type: "compost", points: 10 }
+                    ],
+                    unlocked: true
+                },
+                2: {
+                    name: "Ocean Ecosystem",
+                    description: "Protect marine life by properly disposing of ocean waste. Watch for fishing gear and plastic pollution!",
+                    items: [
+                        { name: "Glass Bottle", type: "recycling", points: 10 },
+                        { name: "Seaweed", type: "compost", points: 10 },
+                        { name: "Plastic Bag", type: "trash", points: 10 },
+                        { name: "Oil Can", type: "hazardous", points: 10 },
+                        { name: "Aluminum Can", type: "recycling", points: 10 },
+                        { name: "Fish Bones", type: "compost", points: 10 }
+                    ],
+                    unlocked: false
+                },
+                3: {
+                    name: "City Ecosystem",
+                    description: "Manage urban waste in a bustling city environment. Sort street litter and household items correctly!",
+                    items: [
+                        { name: "Cardboard Box", type: "recycling", points: 10 },
+                        { name: "Coffee Grounds", type: "compost", points: 10 },
+                        { name: "Styrofoam", type: "trash", points: 10 },
+                        { name: "Paint Can", type: "hazardous", points: 10 },
+                        { name: "Plastic Container", type: "recycling", points: 10 },
+                        { name: "Pizza Box", type: "compost", points: 10 }
+                    ],
+                    unlocked: false
+                },
+                4: {
+                    name: "Arctic Ecosystem",
+                    description: "Help preserve the fragile polar environment. Sort research station waste and expedition items!",
+                    items: [
+                        { name: "Metal Can", type: "recycling", points: 10 },
+                        { name: "Food Scraps", type: "compost", points: 10 },
+                        { name: "Broken Equipment", type: "trash", points: 10 },
+                        { name: "Propane Tank", type: "hazardous", points: 10 },
+                        { name: "Glass Jar", type: "recycling", points: 10 },
+                        { name: "Tea Bags", type: "compost", points: 10 }
+                    ],
+                    unlocked: false
+                },
+                5: {
+                    name: "Mountain Ecosystem",
+                    description: "Keep hiking trails clean and protect mountain wildlife. Sort camping gear and trail snacks properly!",
+                    items: [
+                        { name: "Energy Bar Wrapper", type: "trash", points: 10 },
+                        { name: "Orange Peel", type: "compost", points: 10 },
+                        { name: "Broken Glass", type: "hazardous", points: 10 },
+                        { name: "Aluminum Foil", type: "recycling", points: 10 },
+                        { name: "Nut Shells", type: "compost", points: 10 },
+                        { name: "Plastic Utensils", type: "trash", points: 10 }
+                    ],
+                    unlocked: false
+                },
+                6: {
+                    name: "Desert Ecosystem",
+                    description: "Protect the delicate desert environment from waste. Sort expedition supplies and camping items!",
+                    items: [
+                        { name: "Cactus Parts", type: "compost", points: 10 },
+                        { name: "Water Bottle", type: "recycling", points: 10 },
+                        { name: "Sunscreen Bottle", type: "hazardous", points: 10 },
+                        { name: "Food Packaging", type: "trash", points: 10 },
+                        { name: "Tin Can", type: "recycling", points: 10 },
+                        { name: "Paper Towel", type: "compost", points: 10 }
+                    ],
+                    unlocked: false
+                },
+                7: {
+                    name: "Wetland Ecosystem",
+                    description: "Keep marshes and swamps clean for wildlife. Sort fishing gear and visitor waste properly!",
+                    items: [
+                        { name: "Fishing Line", type: "trash", points: 10 },
+                        { name: "Aquatic Plants", type: "compost", points: 10 },
+                        { name: "Lead Weights", type: "hazardous", points: 10 },
+                        { name: "Plastic Bottle", type: "recycling", points: 10 },
+                        { name: "Worm Container", type: "compost", points: 10 },
+                        { name: "Broken Rod", type: "trash", points: 10 }
+                    ],
+                    unlocked: false
+                },
+                8: {
+                    name: "Farm Ecosystem",
+                    description: "Manage agricultural waste responsibly. Sort farm supplies and organic materials correctly!",
+                    items: [
+                        { name: "Pesticide Container", type: "hazardous", points: 10 },
+                        { name: "Animal Feed Bag", type: "trash", points: 10 },
+                        { name: "Crop Waste", type: "compost", points: 10 },
+                        { name: "Metal Tools", type: "recycling", points: 10 },
+                        { name: "Egg Shells", type: "compost", points: 10 },
+                        { name: "Plastic Sheeting", type: "trash", points: 10 }
+                    ],
+                    unlocked: false
+                },
+                9: {
+                    name: "Beach Ecosystem",
+                    description: "Keep shores clean for marine life and visitors. Sort beach party leftovers and ocean debris!",
+                    items: [
+                        { name: "Sea Shells", type: "compost", points: 10 },
+                        { name: "Soda Can", type: "recycling", points: 10 },
+                        { name: "Broken Glass", type: "hazardous", points: 10 },
+                        { name: "Chip Bag", type: "trash", points: 10 },
+                        { name: "Paper Cup", type: "compost", points: 10 },
+                        { name: "Plastic Straw", type: "trash", points: 10 }
+                    ],
+                    unlocked: false
+                },
+                10: {
+                    name: "Jungle Ecosystem",
+                    description: "Protect tropical biodiversity from waste pollution. Sort expedition gear and natural materials!",
+                    items: [
+                        { name: "Bamboo Pieces", type: "compost", points: 10 },
+                        { name: "Metal Canteen", type: "recycling", points: 10 },
+                        { name: "Insect Repellent", type: "hazardous", points: 10 },
+                        { name: "Plastic Wrapper", type: "trash", points: 10 },
+                        { name: "Fruit Peels", type: "compost", points: 10 },
+                        { name: "Broken Compass", type: "trash", points: 10 }
+                    ],
+                    unlocked: false
+                }
+            }
+        };
+
+        // DOM elements
+        const itemsContainer = document.getElementById('items-container');
+        const scoreElement = document.getElementById('score');
+        const levelTitle = document.querySelector('.level-title');
+        const levelProgress = document.getElementById('level-progress');
+        const resetBtn = document.getElementById('reset-btn');
+        const nextLevelBtn = document.getElementById('next-level-btn');
+        const feedback = document.getElementById('feedback');
+        const levelCards = document.querySelectorAll('.level-card');
+        const ecosystemInfo = document.getElementById('ecosystem-info');
+
+        // Initialize game
+        function initGame() {
+            loadLevel(gameData.currentLevel);
+            updateUI();
+            
+            // Add event listeners
+            resetBtn.addEventListener('click', resetLevel);
+            nextLevelBtn.addEventListener('click', nextLevel);
+            
+            levelCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const level = parseInt(card.getAttribute('data-level'));
+                    if (!card.classList.contains('locked')) {
+                        loadLevel(level);
+                    }
+                });
+            });
+            
+            // Add drag and drop event listeners to bins
+            document.querySelectorAll('.bin').forEach(bin => {
+                bin.addEventListener('dragover', e => {
+                    e.preventDefault();
+                });
+                
+                bin.addEventListener('drop', handleDrop);
+            });
+        }
+
+        // Load a specific level
+        function loadLevel(level) {
+            gameData.currentLevel = level;
+            gameData.itemsSorted = 0;
+            gameData.totalItems = gameData.levels[level].items.length;
+            
+            // Update level title
+            levelTitle.textContent = gameData.levels[level].name;
+            
+            // Update ecosystem info
+            ecosystemInfo.innerHTML = `
+                <h3>${gameData.levels[level].name}</h3>
+                <p>${gameData.levels[level].description}</p>
+            `;
+            
+            // Clear items container
+            itemsContainer.innerHTML = '';
+            
+            // Create items
+            gameData.levels[level].items.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'item';
+                itemElement.textContent = item.name;
+                itemElement.setAttribute('draggable', 'true');
+                itemElement.setAttribute('data-type', item.type);
+                itemElement.setAttribute('data-points', item.points);
+                
+                // Add drag event listeners
+                itemElement.addEventListener('dragstart', handleDragStart);
+                
+                itemsContainer.appendChild(itemElement);
+            });
+            
+            // Update progress bar
+            updateProgressBar();
+            
+            // Enable/disable next level button
+            nextLevelBtn.disabled = true;
+            
+            // Update level cards
+            updateLevelCards();
+        }
+
+        // Handle drag start
+        function handleDragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.textContent);
+            e.dataTransfer.setData('type', e.target.getAttribute('data-type'));
+            e.dataTransfer.setData('points', e.target.getAttribute('data-points'));
+        }
+
+        // Handle drop on bins
+        function handleDrop(e) {
+            e.preventDefault();
+            const itemType = e.dataTransfer.getData('type');
+            const binType = e.target.id.replace('-bin', '');
+            const points = parseInt(e.dataTransfer.getData('points'));
+            
+            if (itemType === binType) {
+                // Correct bin
+                gameData.score += points;
+                gameData.itemsSorted++;
+                showFeedback(`Correct! +${points} points`, true);
+            } else {
+                // Wrong bin
+                gameData.score -= 5;
+                showFeedback(`Wrong bin! -5 points`, false);
+            }
+            
+            // Remove the dragged item from DOM
+            const items = document.querySelectorAll('.item');
+            items.forEach(item => {
+                if (item.textContent === e.dataTransfer.getData('text/plain')) {
+                    item.remove();
+                }
+            });
+            
+            // Update UI
+            updateUI();
+            
+            // Check if level is complete
+            if (gameData.itemsSorted >= gameData.totalItems) {
+                levelComplete();
+            }
+        }
+
+        // Show feedback message
+        function showFeedback(message, isCorrect) {
+            feedback.textContent = message;
+            feedback.style.display = 'block';
+            feedback.style.backgroundColor = isCorrect ? 'rgba(76, 175, 80, 0.9)' : 'rgba(244, 67, 54, 0.9)';
+            
+            setTimeout(() => {
+                feedback.style.display = 'none';
+            }, 1500);
+        }
+
+        // Update UI elements
+        function updateUI() {
+            scoreElement.textContent = gameData.score;
+            updateProgressBar();
+        }
+
+        // Update progress bar
+        function updateProgressBar() {
+            const progress = (gameData.itemsSorted / gameData.totalItems) * 100;
+            levelProgress.style.width = `${progress}%`;
+        }
+
+        // Handle level completion
+        function levelComplete() {
+            showFeedback(`Level Complete! +50 bonus points`, true);
+            gameData.score += 50;
+            
+            // Unlock next level if available
+            if (gameData.currentLevel < Object.keys(gameData.levels).length) {
+                gameData.levels[gameData.currentLevel + 1].unlocked = true;
+                nextLevelBtn.disabled = false;
+            }
+            
+            updateUI();
+            updateLevelCards();
+        }
+
+        // Reset current level
+        function resetLevel() {
+            loadLevel(gameData.currentLevel);
+        }
+
+        // Go to next level
+        function nextLevel() {
+            if (gameData.currentLevel < Object.keys(gameData.levels).length) {
+                loadLevel(gameData.currentLevel + 1);
+            }
+        }
+
+        // Update level cards UI
+        function updateLevelCards() {
+            levelCards.forEach(card => {
+                const level = parseInt(card.getAttribute('data-level'));
+                if (gameData.levels[level].unlocked) {
+                    card.classList.remove('locked');
+                } else {
+                    card.classList.add('locked');
+                }
+                
+                if (level === gameData.currentLevel) {
+                    card.style.transform = 'scale(1.05)';
+                    card.style.boxShadow = '0 6px 10px rgba(0,0,0,0.2)';
+                } else {
+                    card.style.transform = '';
+                    card.style.boxShadow = '';
+                }
+            });
+        }
+
+        // Initialize the game when page loads
+        window.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>
