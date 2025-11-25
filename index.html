@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <!-- ========== BASIC SEO META TAGS ========== -->
-    <title>Eco-Cycle | Educational Recycling Game - Sort Waste, Save Ecosystems</title>
-    <meta name="description" content="Play Eco-Cycle - Free educational recycling game. Sort waste items into correct bins across 10 ecosystems. Learn sustainability & environmental protection through fun gameplay. Perfect for students, teachers, and eco-enthusiasts.">
-    <meta name="keywords" content="recycling game, educational game, environment game, waste sorting, sustainability game, eco game, puzzle game, learning game, educational technology, environmental education">
+    <title>Eco-Cycle | Educational Recycling Game</title>
+    <meta name="description" content="Play Eco-Cycle - Free educational recycling game. Sort waste items into correct bins across 10 ecosystems.">
+    <meta name="keywords" content="recycling game, educational game, environment game, waste sorting">
     <meta name="author" content="Eco-Cycle Game">
     <link rel="canonical" href="https://atuhuriire-stuart.github.io/Eco-cycle-game/">
 
     <!-- ========== OPEN GRAPH (Facebook/LinkedIn) ========== -->
     <meta property="og:title" content="Eco-Cycle - Educational Recycling Game">
-    <meta property="og:description" content="Free educational game: Learn proper waste sorting across 10 ecosystems. Fun, interactive environmental education for all ages.">
+    <meta property="og:description" content="Free educational game: Learn proper waste sorting across 10 ecosystems.">
     <meta property="og:image" content="https://via.placeholder.com/1200x630/4CAF50/white?text=Eco-Cycle+Recycling+Game">
     <meta property="og:url" content="https://atuhuriire-stuart.github.io/Eco-cycle-game/">
     <meta property="og:type" content="website">
@@ -22,9 +22,8 @@
     <!-- ========== TWITTER CARD ========== -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Eco-Cycle - Learn Recycling Through Gameplay">
-    <meta name="twitter:description" content="Free educational recycling game with 10 ecosystems. Sort waste correctly and learn environmental protection.">
+    <meta name="twitter:description" content="Free educational recycling game with 10 ecosystems.">
     <meta name="twitter:image" content="https://via.placeholder.com/1200x630/4CAF50/white?text=Eco-Cycle+Recycling+Game">
-    <meta name="twitter:site" content="@EcoCycleGame">
 
     <!-- ========== ADDITIONAL SEO ENHANCEMENTS ========== -->
     <meta name="robots" content="index, follow">
@@ -56,102 +55,105 @@
         body {
             background-color: #f0f8f0;
             color: var(--dark);
-            line-height: 1.6;
+            line-height: 1.4;
             touch-action: manipulation;
+            overflow-x: hidden;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 100%;
             margin: 0 auto;
-            padding: 20px;
+            padding: 10px;
         }
         
         header {
             text-align: center;
-            padding: 20px 0;
+            padding: 15px 10px;
             background-color: var(--primary);
             color: white;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
         }
         
         .game-area {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
         
         .game-info {
             display: flex;
             justify-content: space-between;
             background-color: white;
-            padding: 15px;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 0.9rem;
         }
         
         .level-info, .score-info, .badges-info {
             display: flex;
             flex-direction: column;
             align-items: center;
+            text-align: center;
         }
         
         .level-title {
-            font-size: 1.5rem;
+            font-size: 1.1rem;
             font-weight: bold;
             color: var(--primary);
         }
         
         .score {
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             font-weight: bold;
             color: var(--secondary);
         }
         
         .badges {
             display: flex;
-            gap: 5px;
+            gap: 3px;
         }
         
         .badge {
-            width: 30px;
-            height: 30px;
+            width: 25px;
+            height: 25px;
             border-radius: 50%;
             background-color: var(--accent);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
         }
         
         .game-board {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
         
         .items-container {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
             background-color: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            min-height: 300px;
+            min-height: 200px;
         }
         
         .item {
             width: 100%;
-            height: 100px;
+            height: 80px;
             background-color: var(--light);
-            border-radius: 8px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -159,37 +161,32 @@
             transition: transform 0.2s;
             font-weight: bold;
             text-align: center;
-            padding: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            font-size: 0.85rem;
             touch-action: none;
-            -webkit-user-drag: element;
         }
         
         .item.dragging {
-            transform: scale(1.1);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            z-index: 1000;
-            position: relative;
-        }
-        
-        .item:hover {
             transform: scale(1.05);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            z-index: 1000;
         }
         
         .bins-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            gap: 10px;
             background-color: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            min-height: 300px;
+            min-height: 200px;
         }
         
         .bin {
-            height: 150px;
-            border-radius: 10px;
+            height: 100px;
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -199,19 +196,21 @@
             position: relative;
             overflow: hidden;
             transition: transform 0.2s;
+            font-size: 0.8rem;
         }
         
         .bin.highlight {
-            transform: scale(1.05);
-            box-shadow: 0 0 0 3px var(--accent);
+            transform: scale(1.03);
+            box-shadow: 0 0 0 2px var(--accent);
         }
         
         .bin-label {
             position: absolute;
-            top: 10px;
+            top: 5px;
             background-color: rgba(0,0,0,0.5);
-            padding: 5px 10px;
-            border-radius: 20px;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.7rem;
         }
         
         .recycling-bin {
@@ -233,19 +232,21 @@
         .game-controls {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            margin-top: 15px;
+            gap: 10px;
         }
         
         button {
-            padding: 12px 25px;
+            padding: 10px 15px;
             border: none;
             border-radius: 5px;
             background-color: var(--secondary);
             color: white;
-            font-size: 1rem;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: background-color 0.3s;
             touch-action: manipulation;
+            flex: 1;
         }
         
         button:hover {
@@ -253,17 +254,16 @@
         }
         
         .levels-container {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 15px;
         }
         
         .level-card {
-            width: 120px;
-            height: 120px;
-            border-radius: 10px;
+            width: 100%;
+            height: 70px;
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -272,12 +272,11 @@
             font-weight: bold;
             cursor: pointer;
             transition: transform 0.3s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             touch-action: manipulation;
-        }
-        
-        .level-card:hover {
-            transform: translateY(-5px);
+            font-size: 0.8rem;
+            text-align: center;
+            padding: 5px;
         }
         
         .level-card.locked {
@@ -332,22 +331,23 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0,0,0,0.9);
             color: white;
-            padding: 20px 40px;
-            border-radius: 10px;
-            font-size: 1.5rem;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 1.1rem;
             display: none;
             z-index: 1000;
             text-align: center;
+            max-width: 80%;
         }
         
         .progress-bar {
             width: 100%;
-            height: 20px;
+            height: 15px;
             background-color: #e0e0e0;
-            border-radius: 10px;
-            margin: 10px 0;
+            border-radius: 8px;
+            margin: 8px 0;
             overflow: hidden;
         }
         
@@ -360,71 +360,103 @@
         
         .ecosystem-info {
             background-color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 0.9rem;
         }
         
         .mobile-help {
-            display: none;
             background-color: var(--accent);
             color: var(--dark);
-            padding: 10px;
+            padding: 8px;
             border-radius: 5px;
             text-align: center;
             margin-bottom: 10px;
             font-weight: bold;
+            font-size: 0.85rem;
         }
-        
-        @media (max-width: 768px) {
-            .game-board {
-                grid-template-columns: 1fr;
-            }
-            
-            .items-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .levels-container {
-                gap: 10px;
-            }
-            
-            .level-card {
-                width: 100px;
-                height: 100px;
-                font-size: 0.9rem;
-            }
-            
-            .mobile-help {
-                display: block;
-            }
-            
-            .item {
-                height: 90px;
-                font-size: 0.9rem;
-            }
-            
-            .bin {
-                height: 120px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .items-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .item {
-                height: 80px;
+
+        /* Very small phones */
+        @media (max-width: 360px) {
+            .container {
+                padding: 8px;
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 1.6rem;
+            }
+            
+            .item {
+                height: 70px;
+                font-size: 0.8rem;
+            }
+            
+            .bin {
+                height: 90px;
+            }
+            
+            .level-card {
+                height: 60px;
+                font-size: 0.75rem;
+            }
+            
+            .game-info {
+                font-size: 0.8rem;
             }
             
             .level-title {
+                font-size: 1rem;
+            }
+            
+            .score {
                 font-size: 1.2rem;
+            }
+        }
+
+        /* Landscape mode */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .container {
+                padding: 5px;
+            }
+            
+            header {
+                padding: 8px 5px;
+                margin-bottom: 8px;
+            }
+            
+            h1 {
+                font-size: 1.4rem;
+                margin-bottom: 5px;
+            }
+            
+            .game-area {
+                gap: 8px;
+            }
+            
+            .items-container, .bins-container {
+                padding: 10px;
+                min-height: 120px;
+            }
+            
+            .item {
+                height: 60px;
+                font-size: 0.75rem;
+            }
+            
+            .bin {
+                height: 70px;
+            }
+            
+            .levels-container {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 5px;
+            }
+            
+            .level-card {
+                height: 50px;
+                font-size: 0.7rem;
             }
         }
     </style>
@@ -433,22 +465,22 @@
     <div class="container">
         <header>
             <h1>Eco-Cycle</h1>
-            <p>Sort waste items by dragging and dropping them into the correct bins to protect our ecosystems!</p>
+            <p>Drag items to correct bins to protect ecosystems!</p>
         </header>
         
         <div class="game-area">
             <div class="mobile-help">
-                📱 Tap and hold items to drag them to bins
+                📱 Tap & hold to drag items
             </div>
             
             <div class="ecosystem-info" id="ecosystem-info">
                 <h3>Forest Ecosystem</h3>
-                <p>Sort waste commonly found in forest environments. Watch out for camping leftovers and hiking trash!</p>
+                <p>Sort waste commonly found in forest environments.</p>
             </div>
             
             <div class="game-info">
                 <div class="level-info">
-                    <div class="level-title">Forest Ecosystem</div>
+                    <div class="level-title">Forest</div>
                     <div class="progress-bar">
                         <div class="progress" id="level-progress"></div>
                     </div>
@@ -488,50 +520,50 @@
             </div>
             
             <div class="game-controls">
-                <button id="reset-btn">Reset Level</button>
+                <button id="reset-btn">Reset</button>
                 <button id="next-level-btn" disabled>Next Level</button>
             </div>
             
             <div class="levels-container">
                 <div class="level-card forest-level" data-level="1">
                     <div>Forest</div>
-                    <div>Level 1</div>
+                    <div>1</div>
                 </div>
                 <div class="level-card ocean-level locked" data-level="2">
                     <div>Ocean</div>
-                    <div>Level 2</div>
+                    <div>2</div>
                 </div>
                 <div class="level-card city-level locked" data-level="3">
                     <div>City</div>
-                    <div>Level 3</div>
+                    <div>3</div>
                 </div>
                 <div class="level-card arctic-level locked" data-level="4">
                     <div>Arctic</div>
-                    <div>Level 4</div>
+                    <div>4</div>
                 </div>
                 <div class="level-card mountain-level locked" data-level="5">
                     <div>Mountain</div>
-                    <div>Level 5</div>
+                    <div>5</div>
                 </div>
                 <div class="level-card desert-level locked" data-level="6">
                     <div>Desert</div>
-                    <div>Level 6</div>
+                    <div>6</div>
                 </div>
                 <div class="level-card wetland-level locked" data-level="7">
                     <div>Wetland</div>
-                    <div>Level 7</div>
+                    <div>7</div>
                 </div>
                 <div class="level-card farm-level locked" data-level="8">
                     <div>Farm</div>
-                    <div>Level 8</div>
+                    <div>8</div>
                 </div>
                 <div class="level-card beach-level locked" data-level="9">
                     <div>Beach</div>
-                    <div>Level 9</div>
+                    <div>9</div>
                 </div>
                 <div class="level-card jungle-level locked" data-level="10">
                     <div>Jungle</div>
-                    <div>Level 10</div>
+                    <div>10</div>
                 </div>
             </div>
         </div>
@@ -551,7 +583,7 @@
             levels: {
                 1: {
                     name: "Forest Ecosystem",
-                    description: "Sort waste commonly found in forest environments. Watch out for camping leftovers and hiking trash!",
+                    description: "Sort waste commonly found in forest environments.",
                     items: [
                         { name: "Plastic Bottle", type: "recycling", points: 10 },
                         { name: "Apple Core", type: "compost", points: 10 },
@@ -564,7 +596,7 @@
                 },
                 2: {
                     name: "Ocean Ecosystem",
-                    description: "Protect marine life by properly disposing of ocean waste. Watch for fishing gear and plastic pollution!",
+                    description: "Protect marine life from ocean waste.",
                     items: [
                         { name: "Glass Bottle", type: "recycling", points: 10 },
                         { name: "Seaweed", type: "compost", points: 10 },
@@ -577,7 +609,7 @@
                 },
                 3: {
                     name: "City Ecosystem",
-                    description: "Manage urban waste in a bustling city environment. Sort street litter and household items correctly!",
+                    description: "Manage urban waste in cities.",
                     items: [
                         { name: "Cardboard Box", type: "recycling", points: 10 },
                         { name: "Coffee Grounds", type: "compost", points: 10 },
@@ -590,7 +622,7 @@
                 },
                 4: {
                     name: "Arctic Ecosystem",
-                    description: "Help preserve the fragile polar environment. Sort research station waste and expedition items!",
+                    description: "Preserve the fragile polar environment.",
                     items: [
                         { name: "Metal Can", type: "recycling", points: 10 },
                         { name: "Food Scraps", type: "compost", points: 10 },
@@ -603,7 +635,7 @@
                 },
                 5: {
                     name: "Mountain Ecosystem",
-                    description: "Keep hiking trails clean and protect mountain wildlife. Sort camping gear and trail snacks properly!",
+                    description: "Keep hiking trails clean.",
                     items: [
                         { name: "Energy Bar Wrapper", type: "trash", points: 10 },
                         { name: "Orange Peel", type: "compost", points: 10 },
@@ -616,7 +648,7 @@
                 },
                 6: {
                     name: "Desert Ecosystem",
-                    description: "Protect the delicate desert environment from waste. Sort expedition supplies and camping items!",
+                    description: "Protect delicate desert environment.",
                     items: [
                         { name: "Cactus Parts", type: "compost", points: 10 },
                         { name: "Water Bottle", type: "recycling", points: 10 },
@@ -629,7 +661,7 @@
                 },
                 7: {
                     name: "Wetland Ecosystem",
-                    description: "Keep marshes and swamps clean for wildlife. Sort fishing gear and visitor waste properly!",
+                    description: "Keep marshes and swamps clean.",
                     items: [
                         { name: "Fishing Line", type: "trash", points: 10 },
                         { name: "Aquatic Plants", type: "compost", points: 10 },
@@ -642,7 +674,7 @@
                 },
                 8: {
                     name: "Farm Ecosystem",
-                    description: "Manage agricultural waste responsibly. Sort farm supplies and organic materials correctly!",
+                    description: "Manage agricultural waste.",
                     items: [
                         { name: "Pesticide Container", type: "hazardous", points: 10 },
                         { name: "Animal Feed Bag", type: "trash", points: 10 },
@@ -655,7 +687,7 @@
                 },
                 9: {
                     name: "Beach Ecosystem",
-                    description: "Keep shores clean for marine life and visitors. Sort beach party leftovers and ocean debris!",
+                    description: "Keep shores clean for marine life.",
                     items: [
                         { name: "Sea Shells", type: "compost", points: 10 },
                         { name: "Soda Can", type: "recycling", points: 10 },
@@ -668,7 +700,7 @@
                 },
                 10: {
                     name: "Jungle Ecosystem",
-                    description: "Protect tropical biodiversity from waste pollution. Sort expedition gear and natural materials!",
+                    description: "Protect tropical biodiversity.",
                     items: [
                         { name: "Bamboo Pieces", type: "compost", points: 10 },
                         { name: "Metal Canteen", type: "recycling", points: 10 },
@@ -693,7 +725,7 @@
         const levelCards = document.querySelectorAll('.level-card');
         const ecosystemInfo = document.getElementById('ecosystem-info');
 
-        // Mobile detection and touch handling
+        // Mobile touch handling
         let activeItem = null;
         let startX = 0;
         let startY = 0;
@@ -716,23 +748,12 @@
                 });
             });
             
-            // Setup drag and drop for desktop
-            setupDesktopDragDrop();
-            
-            // Setup touch events for mobile
-            setupMobileTouchEvents();
+            // Setup touch events
+            setupTouchEvents();
         }
 
-        // Setup desktop drag and drop
-        function setupDesktopDragDrop() {
-            document.querySelectorAll('.bin').forEach(bin => {
-                bin.addEventListener('dragover', handleDragOver);
-                bin.addEventListener('drop', handleDrop);
-            });
-        }
-
-        // Setup mobile touch events
-        function setupMobileTouchEvents() {
+        // Setup touch events for mobile
+        function setupTouchEvents() {
             document.addEventListener('touchstart', handleTouchStart, { passive: false });
             document.addEventListener('touchmove', handleTouchMove, { passive: false });
             document.addEventListener('touchend', handleTouchEnd);
@@ -745,7 +766,7 @@
             gameData.totalItems = gameData.levels[level].items.length;
             
             // Update level title
-            levelTitle.textContent = gameData.levels[level].name;
+            levelTitle.textContent = gameData.levels[level].name.split(' ')[0];
             
             // Update ecosystem info
             ecosystemInfo.innerHTML = `
@@ -761,13 +782,8 @@
                 const itemElement = document.createElement('div');
                 itemElement.className = 'item';
                 itemElement.textContent = item.name;
-                itemElement.setAttribute('draggable', 'true');
                 itemElement.setAttribute('data-type', item.type);
                 itemElement.setAttribute('data-points', item.points);
-                
-                // Add drag event listeners for desktop
-                itemElement.addEventListener('dragstart', handleDragStart);
-                itemElement.addEventListener('dragend', handleDragEnd);
                 
                 itemsContainer.appendChild(itemElement);
             });
@@ -782,41 +798,8 @@
             updateLevelCards();
         }
 
-        // Desktop drag handlers
-        function handleDragStart(e) {
-            e.dataTransfer.setData('text/plain', e.target.textContent);
-            e.dataTransfer.setData('type', e.target.getAttribute('data-type'));
-            e.dataTransfer.setData('points', e.target.getAttribute('data-points'));
-            e.target.classList.add('dragging');
-        }
-
-        function handleDragOver(e) {
-            e.preventDefault();
-            e.target.classList.add('highlight');
-        }
-
-        function handleDragEnd(e) {
-            e.target.classList.remove('dragging');
-            document.querySelectorAll('.bin').forEach(bin => {
-                bin.classList.remove('highlight');
-            });
-        }
-
-        function handleDrop(e) {
-            e.preventDefault();
-            e.target.classList.remove('highlight');
-            
-            const itemType = e.dataTransfer.getData('type');
-            const binType = e.target.id.replace('-bin', '');
-            const points = parseInt(e.dataTransfer.getData('points'));
-            const itemName = e.dataTransfer.getData('text/plain');
-            
-            processItemDrop(itemType, binType, points, itemName);
-        }
-
         // Mobile touch handlers
         function handleTouchStart(e) {
-            // Check if we're touching an item
             const item = e.target.closest('.item');
             if (!item) return;
             
@@ -838,7 +821,7 @@
             const deltaY = touch.clientY - startY;
             
             // Update item position for visual feedback
-            activeItem.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(1.1)`;
+            activeItem.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(1.05)`;
             
             // Highlight bins when dragging over them
             const bins = document.querySelectorAll('.bin');
@@ -880,14 +863,9 @@
             activeItem.style.transform = '';
             activeItem.classList.remove('dragging');
             activeItem = null;
-            
-            // If not dropped on a bin, just reset without penalty
-            if (!dropped) {
-                // No penalty for missing the bin on mobile
-            }
         }
 
-        // Common function to process item drops
+        // Process item drop
         function processItemDrop(itemType, binType, points, itemName) {
             if (itemType === binType) {
                 // Correct bin
@@ -975,14 +953,6 @@
                     card.classList.remove('locked');
                 } else {
                     card.classList.add('locked');
-                }
-                
-                if (level === gameData.currentLevel) {
-                    card.style.transform = 'scale(1.05)';
-                    card.style.boxShadow = '0 6px 10px rgba(0,0,0,0.2)';
-                } else {
-                    card.style.transform = '';
-                    card.style.boxShadow = '';
                 }
             });
         }
